@@ -12,6 +12,7 @@ set(SRCS
   test_Operations.cpp
   test_Operators.cpp
   test_Search.cpp
+  test_toString.cpp
 )
 
 #binary
