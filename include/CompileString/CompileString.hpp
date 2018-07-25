@@ -42,6 +42,15 @@ public:
     for (auto i = std::size_t{0}; i < N + 1; ++i)
       this->container[i] = contents[i];
   }
+  template <size_type B_N>
+  constexpr CompileString(CompileString<B_N> const& src) noexcept : container{0}
+  {
+    constexpr auto end_pos = B_N > N ? N : B_N;
+    for (auto i = size_type{0}; i < end_pos; ++i)
+      this->container[i] = src[i];
+    for (auto i = end_pos; i < N; ++i)
+      this->container[i] = '\0';
+  }
   constexpr CompileString(CompileString const& b) noexcept = default;
   constexpr CompileString(CompileString&& b) noexcept = default;
   ~CompileString() noexcept = default;
@@ -371,6 +380,30 @@ public:
       if (this->container[i - 1] != c)
         return i - 1;
     return npos;
+  }
+
+  // operator+
+  constexpr auto operator+(char c) const noexcept
+  {
+    auto ret = CompileString<N + 1>{*this};
+    ret[N] = c;
+    return ret;
+  }
+  template <size_type B_N>
+  constexpr auto operator+(CompileString<B_N> const& b) const noexcept
+  {
+    auto ret = CompileString<N + B_N>{*this};
+    for (auto i = size_type{0}; i < B_N; ++i)
+      ret[i + N] = b[i];
+    return ret;
+  }
+  template <size_type B_N>
+  constexpr auto operator+(char const (&b)[B_N]) const noexcept
+  {
+    auto ret = CompileString<N + B_N - 1>{*this};
+    for (auto i = size_type{0}; i < B_N - 1; ++i)
+      ret[i + N] = b[i];
+    return ret;
   }
 
 private:

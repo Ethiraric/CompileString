@@ -10,6 +10,7 @@ set(SRCS
   test_ElementAccess.cpp
   test_Iterators.cpp
   test_Operations.cpp
+  test_Operators.cpp
   test_Search.cpp
 )
 
