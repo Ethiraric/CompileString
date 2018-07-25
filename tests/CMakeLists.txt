@@ -7,6 +7,10 @@ project(CompileString)
 set(SRCS
   main.cpp
   test.cpp
+  test_ElementAccess.cpp
+  test_Iterators.cpp
+  test_Operations.cpp
+  test_Search.cpp
 )
 
 #binary
