@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <array>
 #include <cstddef>
+#include <string_view>
 
 namespace compile_string
 {
@@ -58,6 +59,11 @@ public:
   constexpr CompileString& operator=(CompileString const& rhs) noexcept =
       default;
   constexpr CompileString& operator=(CompileString&& rhs) noexcept = default;
+
+  constexpr operator std::string_view() const noexcept
+  {
+    return std::string_view{this->data(), N};
+  }
 
   // Element access
   constexpr value_type& operator[](index_type idx) noexcept

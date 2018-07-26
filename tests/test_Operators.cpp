@@ -22,3 +22,12 @@ TEST_CASE("[Operators] operator+()", "[Operators]")
   CHECK(!std::strcmp(s3.data(), "foobars"));
   CHECK(!std::strcmp(s4.data(), "foobarmeeh"));
 }
+
+TEST_CASE("[Operators] operator std::string_view", "[Operators]")
+{
+  constexpr auto s = CompileString{"foobar"};
+  auto sw = std::string_view{s};
+
+  CHECK(sw.data() == s.data());
+  CHECK(sw.size() == s.size());
+}
