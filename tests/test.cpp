@@ -21,3 +21,11 @@ TEST_CASE("[Capacity] size()", "[Capacity]")
   constexpr auto s2 = CompileString{""};
   CHECK(s2.size() == 0);
 }
+
+TEST_CASE("[Capacity] empty()", "[Capacity]")
+{
+  constexpr auto s = CompileString{"foo"};
+  CHECK(!s.empty());
+  constexpr auto s2 = CompileString{""};
+  CHECK(s2.empty());
+}

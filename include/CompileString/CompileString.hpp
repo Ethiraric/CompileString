@@ -247,6 +247,10 @@ public:
   {
     return N;
   }
+  constexpr bool empty() const noexcept
+  {
+    return this->size() == 0;
+  }
 
   // Operations
   template <size_type B_N>
