@@ -31,3 +31,87 @@ TEST_CASE("[Operators] operator std::string_view", "[Operators]")
   CHECK(sw.data() == s.data());
   CHECK(sw.size() == s.size());
 }
+
+TEST_CASE("[Operators] Comparison", "[Operators]")
+{
+  constexpr char const raws[] = "foo";
+  constexpr auto s = CompileString{raws};
+  constexpr char const raws1[] = "bar";
+  constexpr auto s1 = CompileString{raws1};
+  constexpr char const raws2[] = "baz";
+  constexpr auto s2 = CompileString{raws2};
+  constexpr char const raws3[] = "foo";
+  constexpr auto s3 = CompileString{raws3};
+
+  SECTION("operator==")
+  {
+    CHECK(s == raws);
+    CHECK(s == s3);
+    CHECK(!(s == s2));
+    CHECK(!(s == raws2));
+    CHECK(raws == s);
+    CHECK(!(raws == s2));
+  }
+
+  SECTION("operator!=")
+  {
+    CHECK(!(s != raws));
+    CHECK(!(s != s3));
+    CHECK(s != s2);
+    CHECK(s != raws2);
+    CHECK(!(raws != s));
+    CHECK(raws != s2);
+  }
+
+  SECTION("operator<")
+  {
+    CHECK(s1 < s2);
+    CHECK(s1 < raws2);
+    CHECK(!(s < s1));
+    CHECK(!(s < raws1));
+    CHECK(!(s < s3));
+    CHECK(!(s < raws3));
+    CHECK(raws1 < s2);
+    CHECK(!(raws < s1));
+    CHECK(!(raws < s3));
+  }
+
+  SECTION("operator>")
+  {
+    CHECK(!(s1 > s2));
+    CHECK(!(s1 > raws2));
+    CHECK(s > s1);
+    CHECK(s > raws1);
+    CHECK(!(s > s3));
+    CHECK(!(s > raws3));
+    CHECK(!(raws1 > s2));
+    CHECK(raws > s1);
+    CHECK(!(raws > s3));
+  }
+
+  SECTION("operator<=")
+  {
+    CHECK(s1 <= s2);
+    CHECK(s1 <= raws2);
+    CHECK(!(s <= s1));
+    CHECK(!(s <= raws1));
+    CHECK(s <= s3);
+    CHECK(s <= raws3);
+    CHECK(raws1 <= s2);
+    CHECK(!(raws <= s1));
+    CHECK(raws <= s3);
+  }
+
+  SECTION("operator>=")
+  {
+    CHECK(!(s1 >= s2));
+    CHECK(!(s1 >= raws2));
+    CHECK(s >= s1);
+    CHECK(s >= raws1);
+    CHECK(s >= s3);
+    CHECK(s >= raws3);
+    CHECK(!(raws1 >= s2));
+    CHECK(raws >= s1);
+    CHECK(raws >= s3);
+  }
+}

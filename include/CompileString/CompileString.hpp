@@ -65,6 +65,88 @@ public:
     return std::string_view{this->data(), N};
   }
 
+  template <size_type B_N>
+  constexpr bool operator==(CompileString<B_N> const& b) const noexcept
+  {
+    if constexpr (B_N == N)
+      return std::equal(b.begin(), b.end(), this->begin());
+    else
+      return false;
+  }
+  template <size_type B_N>
+  constexpr bool operator==(char const (&b)[B_N]) const noexcept
+  {
+    if constexpr (B_N - 1 == N)
+      return std::equal(this->begin(), this->end(), &b[0]);
+    return false;
+  }
+  template <size_type B_N>
+  constexpr bool operator!=(CompileString<B_N> const& b) const noexcept
+  {
+    return !(*this == b);
+  }
+  template <size_type B_N>
+  constexpr bool operator!=(char const (&b)[B_N]) const noexcept
+  {
+    return !(*this == b);
+  }
+  template <size_type B_N>
+  constexpr bool operator<(CompileString<B_N> const& b) const noexcept
+  {
+    constexpr auto maxindex = N < B_N ? N : B_N;
+    for (auto i = index_type{0}; i < maxindex; ++i)
+    {
+      if (this->container[i] < b[i])
+        return true;
+      else if (this->container[i] > b[i])
+        return false;
+    }
+    return N < B_N;
+  }
+  template <size_type B_N>
+  constexpr bool operator<(char const (&b)[B_N]) const noexcept
+  {
+    constexpr auto maxindex = N < B_N - 1 ? N : B_N - 1;
+    for (auto i = index_type{0}; i < maxindex; ++i)
+    {
+      if (this->container[i] < b[i])
+        return true;
+      else if (this->container[i] > b[i])
+        return false;
+    }
+    return N < B_N - 1;
+  }
+  template <size_type B_N>
+  constexpr bool operator<=(CompileString<B_N> const& b) const noexcept
+  {
+    return *this < b || *this == b;
+  }
+  template <size_type B_N>
+  constexpr bool operator<=(char const (&b)[B_N]) const noexcept
+  {
+    return *this < b || *this == b;
+  }
+  template <size_type B_N>
+  constexpr bool operator>=(CompileString<B_N> const& b) const noexcept
+  {
+    return *this > b || *this == b;
+  }
+  template <size_type B_N>
+  constexpr bool operator>=(char const (&b)[B_N]) const noexcept
+  {
+    return *this > b || *this == b;
+  }
+  template <size_type B_N>
+  constexpr bool operator>(CompileString<B_N> const& b) const noexcept
+  {
+    return !(*this <= b);
+  }
+  template <size_type B_N>
+  constexpr bool operator>(char const (&b)[B_N]) const noexcept
+  {
+    return !(*this <= b);
+  }
+
   // Element access
   constexpr value_type& operator[](index_type idx) noexcept
   {
@@ -415,6 +497,43 @@ public:
 private:
   container_type container;
 };
+
+template <std::size_t N, std::size_t B_N>
+inline constexpr bool operator==(char const (&a)[N],
+                                 CompileString<B_N> const& b) noexcept
+{
+  return b == a;
+}
+template <std::size_t N, std::size_t B_N>
+inline constexpr bool operator!=(char const (&a)[N],
+                                 CompileString<B_N> const& b) noexcept
+{
+  return b != a;
+}
+template <std::size_t N, std::size_t B_N>
+inline constexpr bool operator<(char const (&a)[N],
+                                 CompileString<B_N> const& b) noexcept
+{
+  return b > a;
+}
+template <std::size_t N, std::size_t B_N>
+inline constexpr bool operator>(char const (&a)[N],
+                                 CompileString<B_N> const& b) noexcept
+{
+  return b < a;
+}
+template <std::size_t N, std::size_t B_N>
+inline constexpr bool operator<=(char const (&a)[N],
+                                 CompileString<B_N> const& b) noexcept
+{
+  return b >= a;
+}
+template <std::size_t N, std::size_t B_N>
+inline constexpr bool operator>=(char const (&a)[N],
+                                 CompileString<B_N> const& b) noexcept
+{
+  return b <= a;
+}
 
 template <std::size_t N>
 CompileString(char const (&s)[N])->CompileString<N - 1>;
