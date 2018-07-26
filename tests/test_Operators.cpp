@@ -16,11 +16,17 @@ TEST_CASE("[Operators] operator+()", "[Operators]")
   static_assert(std::is_same_v<decltype(s3), CompileString<7> const>);
   constexpr auto s4 = s + CompileString{"meeh"};
   static_assert(std::is_same_v<decltype(s4), CompileString<10> const>);
+  constexpr auto s5 = 's' + s;
+  static_assert(std::is_same_v<decltype(s5), CompileString<7> const>);
+  constexpr auto s6 = "moo" + s;
+  static_assert(std::is_same_v<decltype(s6), CompileString<9> const>);
 
   CHECK(!std::strcmp(s.data(), "foobar"));
   CHECK(!std::strcmp(s2.data(), "foobarbaz"));
   CHECK(!std::strcmp(s3.data(), "foobars"));
   CHECK(!std::strcmp(s4.data(), "foobarmeeh"));
+  CHECK(!std::strcmp(s5.data(), "sfoobar"));
+  CHECK(!std::strcmp(s6.data(), "moofoobar"));
 }
 
 TEST_CASE("[Operators] operator std::string_view", "[Operators]")
